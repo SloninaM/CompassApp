@@ -31,6 +31,7 @@ class LocationOperationTest {
     }
 
     private val bearingDelta = 5.0f
+    private val distanceDeltaMeters = 10_000f
 
 
     @Test
@@ -51,5 +52,23 @@ class LocationOperationTest {
         val bearing = locationOperation.calculateBearing()
 
         assertEquals(bearing,-115.0f,bearingDelta)
+    }
+
+    @Test
+    fun calculateDistance_krakowWarszawa_returnAbout252000m(){
+        val locationOperation = LocationOperation(warszawaLocation,wroclawLocation)
+        val distance = locationOperation.calculateDistance()
+        val myDistance = 252_000f
+
+        assertEquals(distance,myDistance,distanceDeltaMeters)
+    }
+
+    @Test
+    fun calculateDistance_wroclawRzeszow_returnAbout372000m(){
+        val locationOperation = LocationOperation(wroclawLocation,rzeszowLocation)
+        val distance = locationOperation.calculateDistance()
+        val myDistance = 372_000f
+
+        assertEquals(distance,myDistance,distanceDeltaMeters)
     }
 }
