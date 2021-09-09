@@ -45,11 +45,9 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == REQUEST_CHECK_SETTINGS){
             if(resultCode == Activity.RESULT_OK){
-                displayShortToast("OK")
+                checkLocationPermission()
             }else{
-                // Location settings are not satisfied, but this can be fixed
-                // by showing the user a dialog.
-                displayShortToast("Cancel")
+                checkLocationTurnOn()
             }
         }
     }
