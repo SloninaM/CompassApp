@@ -9,7 +9,7 @@ class MainRepository {
 
     private val locationSettings = LocationSettings()
     private val permissionManager = PermissionManager()
-
+    private val buildVersionChecker = BuildVersionChecker()
 
 
     fun locationSettingsResponseTaskForFastRequesting(activity: Activity): Task<LocationSettingsResponse> {
@@ -18,6 +18,10 @@ class MainRepository {
 
     fun isPermissionGranted(context: Context, permission: String): Boolean {
         return permissionManager.checkSelfPermission(context,permission)
+    }
+
+    fun isBuildVersionMoreThan23(): Boolean {
+        return buildVersionChecker.isBuildVersionMoreThan23()
     }
 
 

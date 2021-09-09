@@ -24,5 +24,9 @@ class MainViewModel: ViewModel() {
         return repo.isPermissionGranted(context,permission)
     }
 
+    fun isBuildVersionMoreThan23(): Boolean {
+        return repo.isBuildVersionMoreThan23()
+    }
+
 
 }

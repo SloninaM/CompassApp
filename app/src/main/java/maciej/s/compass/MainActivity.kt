@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.os.IBinder
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.common.api.ResolvableApiException
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver {
         }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == REQUEST_CHECK_SETTINGS){
@@ -96,10 +98,12 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver {
         Toast.makeText(this,"$latitude \n $longitude",Toast.LENGTH_LONG).show()
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     fun onClickButton(view: android.view.View) {
         checkLocationTurnOn()
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun checkLocationTurnOn() {
         val task = viewModel.checkLocationTurnOn(this)
 
@@ -119,14 +123,16 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun checkLocationPermission() {
 
         val accessFineLocation = Manifest.permission.ACCESS_FINE_LOCATION
         val isGranted = viewModel.isPermissionGranted(this, accessFineLocation)
+        val isBuildVersionMoreThan23 = viewModel.isBuildVersionMoreThan23()
 
         if (isGranted) {
             startCompass()
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && shouldShowRequestPermissionRationale(
+        } else if (isBuildVersionMoreThan23 && shouldShowRequestPermissionRationale(
                 accessFineLocation
             )
         ) {
