@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver {
         ){  isGranted->
             if(isGranted){
                displayShortToast("Granted")
+                startCompass()
             }else{
                 displayShortToast("Not granted")
             }
@@ -73,8 +74,7 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver {
     }
 
     fun onClickButton(view: android.view.View) {
-        checkLocationPermission()
-        //startCompass()
+        //checkLocationPermission()
     }
 
     private fun checkLocationPermission() {
@@ -85,6 +85,7 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver {
                     Manifest.permission.ACCESS_FINE_LOCATION
                 ) == PackageManager.PERMISSION_GRANTED -> {
                     displayShortToast("You can use the API that requires the permission.")
+                    startCompass()
                 }
                 //TODO when api 23
                 shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
