@@ -57,7 +57,7 @@ class LocationOperationTest {
 
     @Test
     fun calculateDistance_krakowWarszawa_returnAbout252000m(){
-        val locationOperation = LocationOperation(warszawaLocation,wroclawLocation)
+        val locationOperation = LocationOperation(krakowLocation,warszawaLocation)
         val distance = locationOperation.calculateDistance()
         val myDistance = 252_000f
 
