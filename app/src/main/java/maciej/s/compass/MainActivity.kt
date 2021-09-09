@@ -1,6 +1,7 @@
 package maciej.s.compass
 
 import android.Manifest
+import android.app.Activity
 import android.content.*
 import android.content.pm.PackageManager
 import android.os.Build
@@ -10,6 +11,9 @@ import android.os.IBinder
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Task
 import maciej.s.compass.location.LocationReceiver
 import maciej.s.compass.location.LocationService
 import maciej.s.compass.location.LocationUtils
@@ -19,6 +23,8 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver {
 
     private lateinit var mService: LocationService
     private var mBound: Boolean = false
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()
@@ -30,6 +36,18 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver {
                 displayShortToast("Not granted")
             }
         }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == 35){
+            if(resultCode == Activity.RESULT_OK){
+                displayShortToast("OK")
+            }else{
+                displayShortToast("Cancel")
+            }
+        }
+    }
 
     private val connection = object: ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
@@ -48,6 +66,8 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
     }
 
     override fun onStart() {
@@ -74,7 +94,48 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver {
     }
 
     fun onClickButton(view: android.view.View) {
+        checkLocationTurnOn()
         //checkLocationPermission()
+    }
+
+    private fun checkLocationTurnOn() {
+        val locationRequest = LocationRequest.create().apply {
+            interval = 10000
+            fastestInterval = 5000
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
+        val builder = LocationSettingsRequest.Builder()
+            .addLocationRequest(locationRequest)
+
+        val client: SettingsClient = LocationServices.getSettingsClient(this)
+        val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
+
+        task.addOnSuccessListener { locationSettingsResponse ->
+            displayShortToast("The client can initialize location requests here.")
+            // All location settings are satisfied. The client can initialize
+            // location requests here.
+            // ...
+        }
+
+        task.addOnFailureListener { exception ->
+            displayShortToast("Exception")
+            if (exception is ResolvableApiException) {
+                // Location settings are not satisfied, but this can be fixed
+                // by showing the user a dialog.
+                try {
+                    displayShortToast("startResolution")
+                    // Show the dialog by calling startResolutionForResult(),
+                    // and check the result in onActivityResult().
+                    exception.startResolutionForResult(
+                        this@MainActivity,
+                        35
+                    )
+                } catch (sendEx: IntentSender.SendIntentException) {
+                    // Ignore the error.
+                }
+            }
+
+        }
     }
 
     private fun checkLocationPermission() {
