@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity(),MyLocationReceiver {
     override fun onStart() {
         super.onStart()
         val locationReceiver = LocationReceiver(this)
-        registerReceiver(locationReceiver, IntentFilter("test"))
+        registerReceiver(locationReceiver, IntentFilter(LocationUtils.LOCATION_RECEIVE))
         Intent(this,LocationService::class.java).also{ intent->
             bindService(intent,connection, Context.BIND_AUTO_CREATE)
         }
@@ -49,8 +49,8 @@ class MainActivity : AppCompatActivity(),MyLocationReceiver {
         mService.startLocationUpdates()
     }
 
-    override fun onLocationReceive(sth1: Double) {
-        Toast.makeText(this,"$sth1",Toast.LENGTH_LONG).show()
+    override fun onLocationReceive(latitude:Double,longitude:Double) {
+        Toast.makeText(this,"$latitude \n $longitude",Toast.LENGTH_LONG).show()
     }
 
     fun onClickButton(view: android.view.View) {
