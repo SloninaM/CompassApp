@@ -1,4 +1,4 @@
-package maciej.s.compass
+package maciej.s.compass.location
 
 object LocationUtils {
     const val LOCATION_RECEIVE = "LOCATION_RECEIVE"

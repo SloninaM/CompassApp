@@ -1,12 +1,12 @@
-package maciej.s.compass
+package maciej.s.compass.location
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import maciej.s.compass.LocationUtils.LOCATION_RECEIVE
-import maciej.s.compass.LocationUtils.LATITUDE
-import maciej.s.compass.LocationUtils.LONGITUDE
-import maciej.s.compass.LocationUtils.INCORRECT_VALUE
+import maciej.s.compass.location.LocationUtils.LOCATION_RECEIVE
+import maciej.s.compass.location.LocationUtils.LATITUDE
+import maciej.s.compass.location.LocationUtils.LONGITUDE
+import maciej.s.compass.location.LocationUtils.INCORRECT_VALUE
 
 class LocationReceiver(private val receiver: MyLocationReceiver):BroadcastReceiver() {
 

@@ -5,8 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
 import android.widget.Toast
+import maciej.s.compass.location.LocationReceiver
+import maciej.s.compass.location.LocationService
+import maciej.s.compass.location.LocationUtils
+import maciej.s.compass.location.MyLocationReceiver
 
-class MainActivity : AppCompatActivity(),MyLocationReceiver {
+class MainActivity : AppCompatActivity(), MyLocationReceiver {
 
     private lateinit var mService: LocationService
     private var mBound: Boolean = false
@@ -34,7 +38,7 @@ class MainActivity : AppCompatActivity(),MyLocationReceiver {
         super.onStart()
         val locationReceiver = LocationReceiver(this)
         registerReceiver(locationReceiver, IntentFilter(LocationUtils.LOCATION_RECEIVE))
-        Intent(this,LocationService::class.java).also{ intent->
+        Intent(this, LocationService::class.java).also{ intent->
             bindService(intent,connection, Context.BIND_AUTO_CREATE)
         }
     }

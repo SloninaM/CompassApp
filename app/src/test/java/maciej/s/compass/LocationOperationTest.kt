@@ -2,6 +2,7 @@ package maciej.s.compass
 
 import android.location.Location
 import android.location.LocationManager
+import maciej.s.compass.location.LocationOperation
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith

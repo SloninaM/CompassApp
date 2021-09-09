@@ -1,12 +1,12 @@
-package maciej.s.compass
+package maciej.s.compass.location
 
 import android.app.Service
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
-import maciej.s.compass.LocationUtils.LOCATION_RECEIVE
-import maciej.s.compass.LocationUtils.LATITUDE
-import maciej.s.compass.LocationUtils.LONGITUDE
+import maciej.s.compass.location.LocationUtils.LOCATION_RECEIVE
+import maciej.s.compass.location.LocationUtils.LATITUDE
+import maciej.s.compass.location.LocationUtils.LONGITUDE
 
 class LocationService: Service() {
 

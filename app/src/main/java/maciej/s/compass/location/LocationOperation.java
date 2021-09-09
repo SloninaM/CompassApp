@@ -1,4 +1,4 @@
-package maciej.s.compass;
+package maciej.s.compass.location;
 
 import android.location.Location;
 
