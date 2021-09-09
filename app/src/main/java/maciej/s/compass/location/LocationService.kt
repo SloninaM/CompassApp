@@ -6,10 +6,8 @@ import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import android.os.Looper
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Task
 import maciej.s.compass.location.LocationUtils.LOCATION_RECEIVE
 import maciej.s.compass.location.LocationUtils.LATITUDE
 import maciej.s.compass.location.LocationUtils.LONGITUDE
@@ -26,6 +24,8 @@ class LocationService: Service() {
         return binder
     }
 
+    private lateinit var locationServices: FusedLocationProviderClient
+
     @SuppressLint("MissingPermission")
     fun startLocationUpdates(){
         val locationRequest = LocationRequest.create().apply {
@@ -34,8 +34,8 @@ class LocationService: Service() {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
 
-        LocationServices.getFusedLocationProviderClient(this)
-            .requestLocationUpdates(locationRequest,callback, Looper.getMainLooper())
+        locationServices = LocationServices.getFusedLocationProviderClient(this)
+        locationServices.requestLocationUpdates(locationRequest,callback, Looper.getMainLooper())
 
 
     }
@@ -57,5 +57,9 @@ class LocationService: Service() {
             putExtra(LONGITUDE, longitude)
         }
         sendBroadcast(coordinatesIntent)
+    }
+
+    fun stop() {
+        locationServices.removeLocationUpdates(callback)
     }
 }

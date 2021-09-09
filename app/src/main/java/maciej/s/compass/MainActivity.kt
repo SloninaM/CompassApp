@@ -3,13 +3,17 @@ package maciej.s.compass
 import android.Manifest
 import android.app.Activity
 import android.content.*
+import android.location.Location
+import android.location.LocationManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -70,6 +74,18 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver {
         setContentView(R.layout.activity_main)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        setObservers()
+    }
+
+    private fun setObservers() {
+        viewModel.distanceMeters.observe(this, {
+            val tvcos = findViewById<TextView>(R.id.tvDistance)
+            tvcos.text = "$it m"
+        })
+        viewModel.bearing.observe(this,{
+            val tvcos2 = findViewById<TextView>(R.id.tvBearing)
+            tvcos2.text = "$it"
+        })
     }
 
     override fun onStart() {
@@ -83,16 +99,28 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver {
 
     override fun onStop() {
         super.onStop()
+        mService.stop()
         unbindService(connection)
         mBound = false
     }
 
     private fun startCompass(){
+        val location = Location(LocationManager.GPS_PROVIDER)
+        location.apply {
+            latitude = 50.20931297319389
+            longitude = 22.148460163551544
+        }
+        viewModel.setDestination(location)
         mService.startLocationUpdates()
     }
 
     override fun onLocationReceive(latitude:Double,longitude:Double) {
-        Toast.makeText(this,"$latitude \n $longitude",Toast.LENGTH_LONG).show()
+        val location = Location(LocationManager.GPS_PROVIDER)
+        location.latitude = latitude
+        location.longitude = longitude
+        viewModel.setCurrentPosition(location)
+        viewModel.calculateDistance()
+        viewModel.calculateBearing()
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
