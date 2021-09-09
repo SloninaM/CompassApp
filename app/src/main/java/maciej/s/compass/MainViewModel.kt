@@ -1,10 +1,10 @@
 package maciej.s.compass
 
 import android.app.Activity
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.LocationSettingsResponse
 import com.google.android.gms.tasks.Task
 
@@ -20,6 +20,9 @@ class MainViewModel: ViewModel() {
         return repo.locationSettingsResponseTaskForFastRequesting(activity)
     }
 
+    fun isPermissionGranted(context: Context, permission: String): Boolean {
+        return repo.isPermissionGranted(context,permission)
+    }
 
 
 }

@@ -33,10 +33,9 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver {
         registerForActivityResult(ActivityResultContracts.RequestPermission()
         ){  isGranted->
             if(isGranted){
-               displayShortToast("Granted")
                 startCompass()
             }else{
-                displayShortToast("Not granted")
+                displayShortToast("You need 'allow' location. App can't work correctly")
             }
         }
 
@@ -115,42 +114,29 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver {
                         this@MainActivity,
                         REQUEST_CHECK_SETTINGS
                     )
-                } catch (sendEx: IntentSender.SendIntentException) {
-                }
+                } catch (sendEx: IntentSender.SendIntentException) { }
             }
-
         }
     }
 
     private fun checkLocationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            when {
-                ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED -> {
-                    displayShortToast("You can use the API that requires the permission.")
-                    startCompass()
-                }
-                //TODO when api 23
-                shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
-                    displayShortToast("explain to the user why your app requires this permission")
-                // In an educational UI, explain to the user why your app requires this
-                // permission for a specific feature to behave as expected. In this UI,
-                // include a "cancel" or "no thanks" button that allows the user to
-                // continue using your app without granting the permission.
-                //showInContextUI(...)
-            }
-                else -> {
-                    displayShortToast("requstPermissioLauncher.launch(..)")
-                    // You can directly ask for the permission.
-                    // The registered ActivityResultCallback gets the result of this request.
-                    requestPermissionLauncher.launch(
-                        Manifest.permission.ACCESS_FINE_LOCATION)
-                }
-            }
-        }
 
+        val accessFineLocation = Manifest.permission.ACCESS_FINE_LOCATION
+        val isGranted = viewModel.isPermissionGranted(this, accessFineLocation)
+
+        if (isGranted) {
+            startCompass()
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && shouldShowRequestPermissionRationale(
+                accessFineLocation
+            )
+        ) {
+            //TODO display dialog
+            displayShortToast("You need 'allow' location. App can't work correctly")
+        } else {
+            requestPermissionLauncher.launch(
+                accessFineLocation
+            )
+        }
     }
 
     private fun displayShortToast(text:String){
