@@ -3,20 +3,21 @@ package maciej.s.compass
 import android.Manifest
 import android.app.Activity
 import android.content.*
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import android.location.Location
 import android.location.LocationManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
+import kotlinx.android.synthetic.main.activity_main.*
 import maciej.s.compass.location.LocationReceiver
 import maciej.s.compass.location.LocationService
 import maciej.s.compass.location.LocationUtils
@@ -24,13 +25,15 @@ import maciej.s.compass.location.MyLocationReceiver
 
 class MainActivity : AppCompatActivity(), MyLocationReceiver {
 
-    private lateinit var mService: LocationService
-    private var mBound: Boolean = false
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var viewModel: MainViewModel
     companion object{
         private const val REQUEST_CHECK_SETTINGS = 35
     }
+
+    private lateinit var mService: LocationService
+    private var mBound: Boolean = false
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    private lateinit var viewModel: MainViewModel
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()
@@ -77,14 +80,50 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver {
         setObservers()
     }
 
+    override fun onResume() {
+        super.onResume()
+        setSensors()
+    }
+
+    private fun setSensors() {
+        val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+        val sensorAccelerometer: Sensor? = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        val sensorMagneticField: Sensor? = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+
+        when {
+            sensorMagneticField == null -> {
+                displayShortToast("Compass can't work correctly.\n Your device haven't magnetic field sensor")
+            }
+            sensorAccelerometer == null -> {
+                displayShortToast("Compass can't work correctly.\n Your device haven't accelerometer sensor")
+            }
+            else -> {
+                viewModel.setCompassSensors(sensorManager,sensorMagneticField,sensorAccelerometer) //TODO REMEBER TO null this value when onPause and this method in onResume
+                viewModel.setImageRotation()
+                viewModel.imageRotation.observe(this,{
+                    arrowImage.rotation = it
+                    setDirectionTrianglePosition()
+                })
+            }
+        }
+    }
+
+    private fun setDirectionTrianglePosition() {
+        val directionTriangleRotation = viewModel.getDirectionTriangle()
+        if (directionTriangleRotation != null) {
+            directionTriangleImage.rotation = directionTriangleRotation
+        }
+    }
+
     private fun setObservers() {
         viewModel.distanceMeters.observe(this, {
-            val tvcos = findViewById<TextView>(R.id.tvDistance)
-            tvcos.text = "$it m"
+            tvDistance.text = "$it m"
         })
         viewModel.bearing.observe(this,{
-            val tvcos2 = findViewById<TextView>(R.id.tvBearing)
-            tvcos2.text = "$it"
+            tvBearing.text = "$it"
+        })
+        viewModel.yourDirectionBearing.observe(this,{
+            directionTriangleImage.rotation = it
         })
     }
 
@@ -95,6 +134,11 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver {
         Intent(this, LocationService::class.java).also{ intent->
             bindService(intent,connection, Context.BIND_AUTO_CREATE)
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.pauseCompassSensor()
     }
 
     override fun onStop() {
