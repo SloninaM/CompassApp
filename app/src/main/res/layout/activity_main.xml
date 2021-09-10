@@ -51,5 +51,14 @@
         app:layout_constraintVertical_bias="0.355"
         app:srcCompat="@drawable/arrow" />
 
+    <ImageView
+        android:id="@+id/directionTriangleImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/arrowImage"
+        app:layout_constraintStart_toStartOf="@+id/arrowImage"
+        app:layout_constraintTop_toTopOf="@+id/arrowImage"
+        app:srcCompat="@drawable/red_triangle" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

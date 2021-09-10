@@ -102,8 +102,16 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver {
                 viewModel.setImageRotation()
                 viewModel.imageRotation.observe(this,{
                     arrowImage.rotation = it
+                    setDirectionTrianglePosition()
                 })
             }
+        }
+    }
+
+    private fun setDirectionTrianglePosition() {
+        val directionTriangleRotation = viewModel.getDirectionTriangle()
+        if (directionTriangleRotation != null) {
+            directionTriangleImage.rotation = directionTriangleRotation
         }
     }
 
@@ -113,6 +121,9 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver {
         })
         viewModel.bearing.observe(this,{
             tvBearing.text = "$it"
+        })
+        viewModel.yourDirectionBearing.observe(this,{
+            directionTriangleImage.rotation = it
         })
     }
 

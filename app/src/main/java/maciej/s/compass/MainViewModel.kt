@@ -20,9 +20,13 @@ class MainViewModel: ViewModel() {
     val distanceMeters: LiveData<Float>
         get() = _distanceMeters
 
-    private val _bearing = MutableLiveData<Float>()
+    private val _bearing = MutableLiveData<Float>(0f)
     val bearing: LiveData<Float>
         get() = _bearing
+
+    private val _yourDirectionBearing = MutableLiveData<Float>()
+    val yourDirectionBearing: LiveData<Float>
+        get() = _yourDirectionBearing
 
     lateinit var imageRotation: LiveData<Float>
 
@@ -69,5 +73,15 @@ class MainViewModel: ViewModel() {
 
     fun setImageRotation() {
         imageRotation = repo.getCompassRotation()
+    }
+
+    fun getDirectionTriangle(): Float? {
+        val bearing = bearing.value
+        return if(bearing != null){
+            bearing + imageRotation.value!!
+        }else{
+            null
+        }
+
     }
 }
