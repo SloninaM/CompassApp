@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
+import kotlinx.android.synthetic.main.activity_main.*
 import maciej.s.compass.location.LocationReceiver
 import maciej.s.compass.location.LocationService
 import maciej.s.compass.location.LocationUtils
@@ -79,12 +80,10 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver {
 
     private fun setObservers() {
         viewModel.distanceMeters.observe(this, {
-            val tvcos = findViewById<TextView>(R.id.tvDistance)
-            tvcos.text = "$it m"
+            tvDistance.text = "$it m"
         })
         viewModel.bearing.observe(this,{
-            val tvcos2 = findViewById<TextView>(R.id.tvBearing)
-            tvcos2.text = "$it"
+            tvBearing.text = "$it"
         })
     }
 
