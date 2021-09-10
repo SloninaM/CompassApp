@@ -4,7 +4,6 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
@@ -23,6 +22,11 @@ class CompassSensorsManager(private val sensorManager: SensorManager,private val
     val rotation: LiveData<Float>
         get() = _rotation
 
+    companion object{
+        private const val PI_FLOAT = 3.14159f
+        private const val HALF_FULL_ANGLE = 180
+    }
+
     init{
         magneticFieldEventsListener = setMagneticFieldEvents()
         accelerometerEventsListener = setAccelerometerEvents()
@@ -38,8 +42,7 @@ class CompassSensorsManager(private val sensorManager: SensorManager,private val
                     SensorManager.getRotationMatrix(floatRotationMatrix,null,floatGravity,floatGeoMagnetic)
                     SensorManager.getOrientation(floatRotationMatrix, floatOrientation)
 
-                    _rotation.value = -floatOrientation[0]*100/ 3.14159f
-                    Log.i("Compass","Mgn: ${-floatOrientation[0]*100/3.14159}")
+                    _rotation.value = - floatOrientation[0] * HALF_FULL_ANGLE/ PI_FLOAT
                 }
             }
 
@@ -58,8 +61,7 @@ class CompassSensorsManager(private val sensorManager: SensorManager,private val
                     SensorManager.getRotationMatrix(floatRotationMatrix,null,floatGravity,floatGeoMagnetic)
                     SensorManager.getOrientation(floatRotationMatrix, floatOrientation)
 
-                    _rotation.value = -floatOrientation[0]*100/ 3.14159f
-                    Log.i("Compass","Acc: ${-floatOrientation[0]*100/3.14159}")
+                    _rotation.value = - floatOrientation[0] * HALF_FULL_ANGLE/ PI_FLOAT
                 }
             }
 
