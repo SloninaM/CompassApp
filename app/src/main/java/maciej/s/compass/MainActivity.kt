@@ -11,11 +11,9 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -101,6 +99,10 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver {
             }
             else -> {
                 viewModel.setCompassSensors(sensorManager,sensorMagneticField,sensorAccelerometer) //TODO REMEBER TO null this value when onPause and this method in onResume
+                viewModel.setImageRotation()
+                viewModel.imageRotation.observe(this,{
+                    arrowImage.rotation = it
+                })
             }
         }
     }

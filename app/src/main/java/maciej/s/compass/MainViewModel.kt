@@ -5,6 +5,7 @@ import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.location.Location
+import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,6 +23,8 @@ class MainViewModel: ViewModel() {
     private val _bearing = MutableLiveData<Float>()
     val bearing: LiveData<Float>
         get() = _bearing
+
+    lateinit var imageRotation: LiveData<Float>
 
 
     fun checkLocationTurnOn(activity: Activity): Task<LocationSettingsResponse> {
@@ -52,11 +55,19 @@ class MainViewModel: ViewModel() {
         _bearing.value = repo.calculateBearing()
     }
 
-    fun setCompassSensors(sensorManager: SensorManager, sensorMagneticField: Sensor, sensorAccelerometer: Sensor) {
-        repo.setCompassSensors(sensorManager,sensorMagneticField,sensorAccelerometer)
+    fun setCompassSensors(
+        sensorManager: SensorManager,
+        sensorMagneticField: Sensor,
+        sensorAccelerometer: Sensor
+    ) {
+       repo.setCompassSensors(sensorManager,sensorMagneticField,sensorAccelerometer)
     }
 
     fun pauseCompassSensor() {
         repo.pauseCompassSensor()
+    }
+
+    fun setImageRotation() {
+        imageRotation = repo.getCompassRotation()
     }
 }
