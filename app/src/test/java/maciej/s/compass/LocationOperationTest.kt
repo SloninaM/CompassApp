@@ -2,6 +2,7 @@ package maciej.s.compass
 
 import android.location.Location
 import android.location.LocationManager
+import maciej.s.compass.location.LocationOperation
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -56,7 +57,7 @@ class LocationOperationTest {
 
     @Test
     fun calculateDistance_krakowWarszawa_returnAbout252000m(){
-        val locationOperation = LocationOperation(warszawaLocation,wroclawLocation)
+        val locationOperation = LocationOperation(krakowLocation,warszawaLocation)
         val distance = locationOperation.calculateDistance()
         val myDistance = 252_000f
 

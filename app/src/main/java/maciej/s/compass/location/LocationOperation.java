@@ -1,4 +1,4 @@
-package maciej.s.compass;
+package maciej.s.compass.location;
 
 import android.location.Location;
 
@@ -9,8 +9,7 @@ public class LocationOperation {
     private Location currentLocation;
     private final Location destinationLocation;
 
-    public LocationOperation(Location currentLocation, Location destinationLocation) {
-        this.currentLocation = currentLocation;
+    public LocationOperation(Location destinationLocation) {
         this.destinationLocation = destinationLocation;
     }
 
