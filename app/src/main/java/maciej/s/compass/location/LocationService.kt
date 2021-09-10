@@ -60,6 +60,8 @@ class LocationService: Service() {
     }
 
     fun stop() {
-        locationServices.removeLocationUpdates(callback)
+        if(this::locationServices.isInitialized){
+            locationServices.removeLocationUpdates(callback)
+        }
     }
 }
