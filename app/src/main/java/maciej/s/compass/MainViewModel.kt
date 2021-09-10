@@ -2,6 +2,8 @@ package maciej.s.compass
 
 import android.app.Activity
 import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -48,5 +50,13 @@ class MainViewModel: ViewModel() {
 
     fun calculateBearing() {
         _bearing.value = repo.calculateBearing()
+    }
+
+    fun setCompassSensors(sensorManager: SensorManager, sensorMagneticField: Sensor, sensorAccelerometer: Sensor) {
+        repo.setCompassSensors(sensorManager,sensorMagneticField,sensorAccelerometer)
+    }
+
+    fun pauseCompassSensor() {
+        repo.pauseCompassSensor()
     }
 }

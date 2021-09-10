@@ -2,6 +2,8 @@ package maciej.s.compass
 
 import android.app.Activity
 import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import android.location.Location
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
@@ -13,6 +15,7 @@ class MainRepository {
     private val permissionManager = PermissionManager()
     private val buildVersionChecker = BuildVersionChecker()
     private lateinit var locationOperation: LocationOperation
+    private var compassSensorsManager: CompassSensorsManager? = null
 
 
     fun locationSettingsResponseTaskForFastRequesting(activity: Activity): Task<LocationSettingsResponse> {
@@ -41,6 +44,15 @@ class MainRepository {
 
     fun calculateBearing(): Float {
         return locationOperation.calculateBearing()
+    }
+
+    fun setCompassSensors(sensorManager: SensorManager, sensorMagneticField: Sensor, sensorAccelerometer: Sensor) {
+        compassSensorsManager = CompassSensorsManager(sensorManager,sensorMagneticField,sensorAccelerometer)
+    }
+
+    fun pauseCompassSensor() {
+        compassSensorsManager!!.pauseCompassSensor()
+        compassSensorsManager = null
     }
 
 
