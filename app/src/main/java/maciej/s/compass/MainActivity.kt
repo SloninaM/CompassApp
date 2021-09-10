@@ -23,7 +23,8 @@ import maciej.s.compass.location.LocationService
 import maciej.s.compass.location.LocationUtils
 import maciej.s.compass.location.MyLocationReceiver
 
-class MainActivity : AppCompatActivity(), MyLocationReceiver {
+class MainActivity : AppCompatActivity(), MyLocationReceiver,
+    DestinationLocationFragment.DestinationLocationListener {
 
     companion object{
         private const val REQUEST_CHECK_SETTINGS = 35
@@ -149,12 +150,6 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver {
     }
 
     private fun startCompass(){
-        val location = Location(LocationManager.GPS_PROVIDER)
-        location.apply {
-            latitude = 50.20931297319389
-            longitude = 22.148460163551544
-        }
-        viewModel.setDestination(location)
         mService.startLocationUpdates()
     }
 
@@ -169,7 +164,10 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver {
 
     @RequiresApi(Build.VERSION_CODES.M)
     fun onClickButton(view: android.view.View) {
-        checkLocationTurnOn()
+        val ft = supportFragmentManager.beginTransaction()
+        val dialogFragment = DestinationLocationFragment()
+        dialogFragment.listener = this
+        dialogFragment.show(ft,"Dialog")
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -216,5 +214,15 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver {
 
     private fun displayShortToast(text:String){
         Toast.makeText(this,text,Toast.LENGTH_SHORT).show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    override fun onChangeDestination(latitude: Double, longitude: Double) {
+        val location = Location(LocationManager.GPS_PROVIDER)
+        location.latitude = latitude
+        location.longitude = longitude
+        viewModel.setDestination(location)
+
+        checkLocationTurnOn()
     }
 }
