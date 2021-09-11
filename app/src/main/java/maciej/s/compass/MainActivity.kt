@@ -1,6 +1,7 @@
 package maciej.s.compass
 
-import android.Manifest
+import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.*
 import android.hardware.Sensor
@@ -22,6 +23,8 @@ import maciej.s.compass.location.LocationReceiver
 import maciej.s.compass.location.LocationService
 import maciej.s.compass.location.LocationUtils
 import maciej.s.compass.location.MyLocationReceiver
+import androidx.appcompat.app.AlertDialog
+
 
 class MainActivity : AppCompatActivity(), MyLocationReceiver,
     DestinationLocationFragment.DestinationLocationListener {
@@ -36,13 +39,18 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
 
     private lateinit var viewModel: MainViewModel
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()
         ){  isGranted->
             if(isGranted){
                 startCompass()
             }else{
-                displayShortToast("You need 'allow' location. App can't work correctly")
+                if(shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)) {
+                    createInfoDialog()
+                }else{
+                    displayShortToast("You need 'allow' location, it settings of your app or reinstall app. Now app can't work correctly")
+                }
             }
         }
 
@@ -93,6 +101,7 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
 
         when {
             sensorMagneticField == null -> {
+                //TODO set this info on viewModel and don't check it again, maybe hidden the image
                 displayShortToast("Compass can't work correctly.\n Your device haven't magnetic field sensor")
             }
             sensorAccelerometer == null -> {
@@ -116,6 +125,7 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
         }
     }
 
+    @SuppressLint("NewApi")
     private fun setObservers() {
         viewModel.distanceMeters.observe(this, {
             tvDistance.text = "$it m"
@@ -125,6 +135,9 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
         })
         viewModel.yourDirectionBearing.observe(this,{
             directionTriangleImage.rotation = it
+        })
+        viewModel.shownLocationRationaleSwitcher.observe(this,{
+            launchRequestPermission(ACCESS_FINE_LOCATION)
         })
     }
 
@@ -190,26 +203,41 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
         }
     }
 
+
     @RequiresApi(Build.VERSION_CODES.M)
     private fun checkLocationPermission() {
-
-        val accessFineLocation = Manifest.permission.ACCESS_FINE_LOCATION
-        val isGranted = viewModel.isPermissionGranted(this, accessFineLocation)
+        val isGranted = viewModel.isPermissionGranted(this, ACCESS_FINE_LOCATION)
         val isBuildVersionMoreThan23 = viewModel.isBuildVersionMoreThan23()
 
         if (isGranted) {
             startCompass()
-        } else if (isBuildVersionMoreThan23 && shouldShowRequestPermissionRationale(
-                accessFineLocation
-            )
-        ) {
-            //TODO display dialog
-            displayShortToast("You need 'allow' location. App can't work correctly")
-        } else {
-            requestPermissionLauncher.launch(
-                accessFineLocation
-            )
+        } else if (isBuildVersionMoreThan23) {
+            if(shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)){
+            createInfoDialog()
+            }else{
+                launchRequestPermission(ACCESS_FINE_LOCATION)
+            }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun launchRequestPermission(permission: String) {
+        requestPermissionLauncher.launch(
+            permission
+        )
+    }
+
+    private fun createInfoDialog() {
+        val alertDialog: AlertDialog = AlertDialog.Builder(this@MainActivity).create()
+        alertDialog.setTitle("App need your location")
+        alertDialog.setMessage("The application needs your location to calculate the distance and direction to the destination :)")
+        alertDialog.setButton(
+            AlertDialog.BUTTON_NEUTRAL, "OK"
+        ) { dialog, _ ->
+            viewModel.setShownLocationRationaleSwitcher()
+            dialog.dismiss()
+        }
+        alertDialog.show()
     }
 
     private fun displayShortToast(text:String){
