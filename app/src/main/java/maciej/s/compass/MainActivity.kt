@@ -241,10 +241,10 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
 
     private fun createInfoDialog() {
         val alertDialog: AlertDialog = AlertDialog.Builder(this@MainActivity).create()
-        alertDialog.setTitle("App need your location")
-        alertDialog.setMessage("The application needs your location to calculate the distance and direction to the destination :)")
+        alertDialog.setTitle(getString(R.string.app_need_location))
+        alertDialog.setMessage(getString(R.string.app_need_location_rationale))
         alertDialog.setButton(
-            AlertDialog.BUTTON_NEUTRAL, "OK"
+            AlertDialog.BUTTON_NEUTRAL, getString(R.string.ok)
         ) { dialog, _ ->
             viewModel.setShownLocationRationaleSwitcher()
             dialog.dismiss()
