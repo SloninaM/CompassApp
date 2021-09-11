@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Compass</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="allow_location_in_app_settings">You need \'allow\' location in the settings of your app\n or reinstall the app.\nNow app can\'t work correctly</string>
 </resources>
