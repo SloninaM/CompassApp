@@ -1,4 +1,4 @@
-package maciej.s.compass
+package maciej.s.compass.main
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
@@ -25,6 +25,8 @@ import maciej.s.compass.location.LocationService
 import maciej.s.compass.location.LocationUtils
 import maciej.s.compass.location.MyLocationReceiver
 import androidx.appcompat.app.AlertDialog
+import maciej.s.compass.DestinationLocationFragment
+import maciej.s.compass.R
 
 
 class MainActivity : AppCompatActivity(), MyLocationReceiver,

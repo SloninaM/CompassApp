@@ -1,4 +1,4 @@
-package maciej.s.compass
+package maciej.s.compass.main
 
 import android.app.Activity
 import android.content.Context
@@ -8,6 +8,10 @@ import android.location.Location
 import androidx.lifecycle.LiveData
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
+import maciej.s.compass.BuildVersionChecker
+import maciej.s.compass.CompassSensorsManager
+import maciej.s.compass.LocationSettings
+import maciej.s.compass.PermissionManager
 import maciej.s.compass.location.LocationOperation
 
 class MainRepository {

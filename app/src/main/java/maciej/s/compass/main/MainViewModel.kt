@@ -1,4 +1,4 @@
-package maciej.s.compass
+package maciej.s.compass.main
 
 import android.app.Activity
 import android.content.Context
