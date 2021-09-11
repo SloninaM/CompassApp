@@ -4,8 +4,10 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import kotlin.math.absoluteValue
 
 class CompassSensorsManager(private val sensorManager: SensorManager,private val sensorMagneticField: Sensor,private val sensorAccelerometer: Sensor) {
 

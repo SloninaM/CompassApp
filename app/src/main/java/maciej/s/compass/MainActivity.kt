@@ -120,17 +120,18 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
                 viewModel.setCompassSensors(sensorManager,sensorMagneticField,sensorAccelerometer) //TODO REMEBER TO null this value when onPause and this method in onResume
                 viewModel.setImageRotation()
                 viewModel.imageRotation.observe(this,{
-                    compassImage.rotation = it
-                    setDirectionTrianglePosition()
+                    val duration = viewModel.getDuration(it)
+                    compassImage.animate().rotation(it).duration = duration
+                    setDirectionTrianglePosition(duration)
                 })
             }
         }
     }
 
-    private fun setDirectionTrianglePosition() {
+    private fun setDirectionTrianglePosition(duration: Long) {
         val directionTriangleRotation = viewModel.getDirectionTriangle()
         if (directionTriangleRotation != null) {
-            directionTriangleImage.rotation = directionTriangleRotation
+            directionTriangleImage.animate().rotation(directionTriangleRotation).duration = duration
         }
     }
 
