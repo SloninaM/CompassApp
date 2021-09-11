@@ -9,7 +9,7 @@ import androidx.lifecycle.LiveData
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import maciej.s.compass.helper.BuildVersionChecker
-import maciej.s.compass.CompassSensorsManager
+import maciej.s.compass.sensors.CompassSensorsManager
 import maciej.s.compass.location.LocationSettings
 import maciej.s.compass.helper.PermissionManager
 import maciej.s.compass.location.LocationOperation

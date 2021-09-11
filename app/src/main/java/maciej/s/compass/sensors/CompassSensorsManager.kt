@@ -1,13 +1,11 @@
-package maciej.s.compass
+package maciej.s.compass.sensors
 
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import kotlin.math.absoluteValue
 
 class CompassSensorsManager(private val sensorManager: SensorManager,private val sensorMagneticField: Sensor,private val sensorAccelerometer: Sensor) {
 
@@ -44,7 +42,7 @@ class CompassSensorsManager(private val sensorManager: SensorManager,private val
                     SensorManager.getRotationMatrix(floatRotationMatrix,null,floatGravity,floatGeoMagnetic)
                     SensorManager.getOrientation(floatRotationMatrix, floatOrientation)
 
-                    _rotation.value = - floatOrientation[0] * HALF_FULL_ANGLE/ PI_FLOAT
+                    _rotation.value = - floatOrientation[0] * HALF_FULL_ANGLE / PI_FLOAT
                 }
             }
 
@@ -63,7 +61,7 @@ class CompassSensorsManager(private val sensorManager: SensorManager,private val
                     SensorManager.getRotationMatrix(floatRotationMatrix,null,floatGravity,floatGeoMagnetic)
                     SensorManager.getOrientation(floatRotationMatrix, floatOrientation)
 
-                    _rotation.value = - floatOrientation[0] * HALF_FULL_ANGLE/ PI_FLOAT
+                    _rotation.value = - floatOrientation[0] * HALF_FULL_ANGLE / PI_FLOAT
                 }
             }
 
