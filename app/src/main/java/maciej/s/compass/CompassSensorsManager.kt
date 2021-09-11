@@ -18,7 +18,7 @@ class CompassSensorsManager(private val sensorManager: SensorManager,private val
     private val magneticFieldEventsListener: SensorEventListener
     private val accelerometerEventsListener: SensorEventListener
 
-    private val _rotation = MutableLiveData<Float>(0.0f)
+    private val _rotation = MutableLiveData(0.0f)
     val rotation: LiveData<Float>
         get() = _rotation
 

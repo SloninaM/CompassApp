@@ -1,5 +1,16 @@
 <resources>
     <string name="app_name">Compass</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="allow_location_in_app_settings">You need \'allow\' location in the settings of your app\n or reinstall the app.\nNow app can\'t work correctly</string>
+    <string name="app_cant_work_correctly_no_magnetic_field_sensor">Compass can\'t work correctly.\nYour device haven\'t magnetic field sensor</string>
+    <string name="app_cant_work_correctly_no_accelerometer_field_sensor">Compass can\'t work correctly.\nYour device haven\'t accelerometer sensor</string>
+    <string name="app_need_location">App need your location</string>
+    <string name="app_need_location_rationale">The application needs your location to calculate the distance and direction to the destination :)</string>
+    <string name="ok">OK</string>
+    <string name="enter_destination_location">Enter destination location</string>
+    <string name="cancel">Cancel</string>
+    <string name="coordinates_cannot_be_empty">Latitude and Longitude cannot be empty</string>
+    <string name="SET_DESTINATION">SET DESTINATION</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="meters_short">%1$d m</string>
 </resources>

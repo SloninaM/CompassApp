@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.textfield.TextInputEditText
-import kotlinx.android.synthetic.main.fragment_destination_location.*
 
 class DestinationLocationFragment : DialogFragment() {
 
@@ -25,8 +24,8 @@ class DestinationLocationFragment : DialogFragment() {
 
             val view = inflater?.inflate(R.layout.fragment_destination_location,null)
             builder.setView(view)
-            builder.setTitle("Enter destination location")
-                .setPositiveButton("OK") { sth1, sth2 ->
+            builder.setTitle(getString(R.string.enter_destination_location))
+                .setPositiveButton(getString(R.string.ok)) { _, _ ->
                     val latitudeEditText = view?.findViewById<TextInputEditText>(R.id.etLatitude)
                     val longitudeEditText = view?.findViewById<TextInputEditText>(R.id.etLongitude)
                     checkFields(latitudeEditText,longitudeEditText)
@@ -36,7 +35,7 @@ class DestinationLocationFragment : DialogFragment() {
                         listener!!.onChangeDestination(latitude, longitude)
                     }
                 }
-                .setNegativeButton("Cancel") { _, _ ->
+                .setNegativeButton(getString(R.string.cancel)) { _, _ ->
 
                 }
 
@@ -59,7 +58,7 @@ class DestinationLocationFragment : DialogFragment() {
     }
 
     private fun displayNotEmptyCoordinatesToast(){
-        Toast.makeText(context,"Latitude and Longitude cannot be empty",Toast.LENGTH_SHORT).show()
+        Toast.makeText(context,getString(R.string.coordinates_cannot_be_empty),Toast.LENGTH_SHORT).show()
     }
 
 }

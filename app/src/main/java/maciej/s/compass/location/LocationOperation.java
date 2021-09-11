@@ -2,8 +2,6 @@ package maciej.s.compass.location;
 
 import android.location.Location;
 
-import androidx.annotation.NonNull;
-
 public class LocationOperation {
 
     private Location currentLocation;

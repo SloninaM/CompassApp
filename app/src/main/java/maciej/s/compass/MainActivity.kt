@@ -12,13 +12,14 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
-import kotlinx.android.synthetic.main.activity_main.*
 import maciej.s.compass.location.LocationReceiver
 import maciej.s.compass.location.LocationService
 import maciej.s.compass.location.LocationUtils
@@ -39,6 +40,11 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
 
     private lateinit var viewModel: MainViewModel
 
+    private lateinit var arrowImage: ImageView
+    private lateinit var directionTriangleImage: ImageView
+    private lateinit var tvBearing: TextView
+    private lateinit var tvDistance: TextView
+
     @RequiresApi(Build.VERSION_CODES.M)
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()
@@ -49,10 +55,11 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
                 if(shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)) {
                     createInfoDialog()
                 }else{
-                    displayShortToast("You need 'allow' location, it settings of your app or reinstall app. Now app can't work correctly")
+                    displayLongToast(R.string.allow_location_in_app_settings)
                 }
             }
         }
+
 
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -87,6 +94,10 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         setObservers()
+        arrowImage = findViewById(R.id.arrowImage)
+        directionTriangleImage = findViewById(R.id.directionTriangleImage)
+        tvBearing = findViewById(R.id.tvBearing)
+        tvDistance = findViewById(R.id.tvDistance)
     }
 
     override fun onResume() {
@@ -102,10 +113,10 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
         when {
             sensorMagneticField == null -> {
                 //TODO set this info on viewModel and don't check it again, maybe hidden the image
-                displayShortToast("Compass can't work correctly.\n Your device haven't magnetic field sensor")
+                displayLongToast(R.string.app_cant_work_correctly_no_magnetic_field_sensor)
             }
             sensorAccelerometer == null -> {
-                displayShortToast("Compass can't work correctly.\n Your device haven't accelerometer sensor")
+                displayLongToast(R.string.app_cant_work_correctly_no_accelerometer_field_sensor)
             }
             else -> {
                 viewModel.setCompassSensors(sensorManager,sensorMagneticField,sensorAccelerometer) //TODO REMEBER TO null this value when onPause and this method in onResume
@@ -128,7 +139,8 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
     @SuppressLint("NewApi")
     private fun setObservers() {
         viewModel.distanceMeters.observe(this, {
-            tvDistance.text = "$it m"
+            val intMeters = it.toInt()
+            tvDistance.text = getString(R.string.meters_short,intMeters)
         })
         viewModel.bearing.observe(this,{
             tvBearing.text = "$it"
@@ -229,10 +241,10 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
 
     private fun createInfoDialog() {
         val alertDialog: AlertDialog = AlertDialog.Builder(this@MainActivity).create()
-        alertDialog.setTitle("App need your location")
-        alertDialog.setMessage("The application needs your location to calculate the distance and direction to the destination :)")
+        alertDialog.setTitle(getString(R.string.app_need_location))
+        alertDialog.setMessage(getString(R.string.app_need_location_rationale))
         alertDialog.setButton(
-            AlertDialog.BUTTON_NEUTRAL, "OK"
+            AlertDialog.BUTTON_NEUTRAL, getString(R.string.ok)
         ) { dialog, _ ->
             viewModel.setShownLocationRationaleSwitcher()
             dialog.dismiss()
@@ -240,8 +252,10 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
         alertDialog.show()
     }
 
-    private fun displayShortToast(text:String){
-        Toast.makeText(this,text,Toast.LENGTH_SHORT).show()
+
+    private fun displayLongToast(stringResource:Int){
+        val text = getString(stringResource)
+        Toast.makeText(this,text,Toast.LENGTH_LONG).show()
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
