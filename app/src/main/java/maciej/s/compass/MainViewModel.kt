@@ -30,6 +30,10 @@ class MainViewModel: ViewModel() {
 
     lateinit var imageRotation: LiveData<Float>
 
+    private val _shownLocationRationaleSwitcher = MutableLiveData<Boolean>()
+        val shownLocationRationaleSwitcher: LiveData<Boolean>
+            get() = _shownLocationRationaleSwitcher
+
 
     fun checkLocationTurnOn(activity: Activity): Task<LocationSettingsResponse> {
         return repo.locationSettingsResponseTaskForFastRequesting(activity)
@@ -83,5 +87,9 @@ class MainViewModel: ViewModel() {
             null
         }
 
+    }
+
+    fun setShownLocationRationaleSwitcher() {
+        _shownLocationRationaleSwitcher.value = _shownLocationRationaleSwitcher.value != true
     }
 }
