@@ -40,9 +40,8 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
 
     private lateinit var viewModel: MainViewModel
 
-    private lateinit var arrowImage: ImageView
+    private lateinit var compassImage: ImageView
     private lateinit var directionTriangleImage: ImageView
-    private lateinit var tvBearing: TextView
     private lateinit var tvDistance: TextView
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -94,9 +93,8 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         setObservers()
-        arrowImage = findViewById(R.id.arrowImage)
+        compassImage = findViewById(R.id.compassImage)
         directionTriangleImage = findViewById(R.id.directionTriangleImage)
-        tvBearing = findViewById(R.id.tvBearing)
         tvDistance = findViewById(R.id.tvDistance)
     }
 
@@ -122,7 +120,7 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
                 viewModel.setCompassSensors(sensorManager,sensorMagneticField,sensorAccelerometer) //TODO REMEBER TO null this value when onPause and this method in onResume
                 viewModel.setImageRotation()
                 viewModel.imageRotation.observe(this,{
-                    arrowImage.rotation = it
+                    compassImage.rotation = it
                     setDirectionTrianglePosition()
                 })
             }
@@ -140,10 +138,7 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
     private fun setObservers() {
         viewModel.distanceMeters.observe(this, {
             val intMeters = it.toInt()
-            tvDistance.text = getString(R.string.meters_short,intMeters)
-        })
-        viewModel.bearing.observe(this,{
-            tvBearing.text = "$it"
+            tvDistance.text = getString(R.string.distance_from_the_destination,intMeters)
         })
         viewModel.yourDirectionBearing.observe(this,{
             directionTriangleImage.rotation = it

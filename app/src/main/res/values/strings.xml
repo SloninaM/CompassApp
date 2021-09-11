@@ -12,5 +12,5 @@
     <string name="SET_DESTINATION">SET DESTINATION</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
-    <string name="meters_short">%1$d m</string>
+    <string name="distance_from_the_destination">Distance from the destination: %1$d m</string>
 </resources>
