@@ -41,31 +41,42 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/compassImage"
+        app:layout_constraintTop_toBottomOf="@id/compassFragment"
         app:layout_constraintVertical_bias="0.225" />
 
-    <ImageView
-        android:id="@+id/compassImage"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/compassFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:name="maciej.s.compass.fragments.CompassFragment"
         app:layout_constraintBottom_toTopOf="@id/button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cvDistance"
-        app:layout_constraintVertical_bias="0.355"
-        app:srcCompat="@mipmap/compass_blue" />
+        app:layout_constraintVertical_bias="0.355"/>
 
-    <ImageView
-        android:id="@+id/directionTriangleImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/compassImage"
-        app:layout_constraintEnd_toEndOf="@id/compassImage"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@id/compassImage"
-        app:layout_constraintTop_toTopOf="@id/compassImage"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@mipmap/green_triangle" />
+<!--    <ImageView-->
+<!--        android:id="@+id/compassImage"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/button"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/cvDistance"-->
+<!--        app:layout_constraintVertical_bias="0.355"-->
+<!--        app:srcCompat="@mipmap/compass_blue" />-->
+
+<!--    <ImageView-->
+<!--        android:id="@+id/directionTriangleImage"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/compassImage"-->
+<!--        app:layout_constraintEnd_toEndOf="@id/compassImage"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="@id/compassImage"-->
+<!--        app:layout_constraintTop_toTopOf="@id/compassImage"-->
+<!--        app:layout_constraintVertical_bias="0.0"-->
+<!--        app:srcCompat="@mipmap/green_triangle" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
