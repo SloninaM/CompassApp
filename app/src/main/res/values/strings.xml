@@ -10,4 +10,6 @@
     <string name="cancel">Cancel</string>
     <string name="coordinates_cannot_be_empty">Latitude and Longitude cannot be empty</string>
     <string name="SET_DESTINATION">SET DESTINATION</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
 </resources>
