@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
                 if(shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)) {
                     createInfoDialog()
                 }else{
-                    displayShortToast("You need 'allow' location, it settings of your app or reinstall app. Now app can't work correctly")
+                    displayLongToast(R.string.allow_location_in_app_settings)
                 }
             }
         }
@@ -114,10 +114,10 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
         when {
             sensorMagneticField == null -> {
                 //TODO set this info on viewModel and don't check it again, maybe hidden the image
-                displayShortToast("Compass can't work correctly.\n Your device haven't magnetic field sensor")
+                displayLongToast(R.string.app_cant_work_correctly_no_magnetic_field_sensor)
             }
             sensorAccelerometer == null -> {
-                displayShortToast("Compass can't work correctly.\n Your device haven't accelerometer sensor")
+                displayLongToast(R.string.app_cant_work_correctly_no_accelerometer_field_sensor)
             }
             else -> {
                 viewModel.setCompassSensors(sensorManager,sensorMagneticField,sensorAccelerometer) //TODO REMEBER TO null this value when onPause and this method in onResume
@@ -241,10 +241,10 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
 
     private fun createInfoDialog() {
         val alertDialog: AlertDialog = AlertDialog.Builder(this@MainActivity).create()
-        alertDialog.setTitle("App need your location")
-        alertDialog.setMessage("The application needs your location to calculate the distance and direction to the destination :)")
+        alertDialog.setTitle(getString(R.string.app_need_location))
+        alertDialog.setMessage(getString(R.string.app_need_location_rationale))
         alertDialog.setButton(
-            AlertDialog.BUTTON_NEUTRAL, "OK"
+            AlertDialog.BUTTON_NEUTRAL, getString(R.string.ok)
         ) { dialog, _ ->
             viewModel.setShownLocationRationaleSwitcher()
             dialog.dismiss()
@@ -252,8 +252,10 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
         alertDialog.show()
     }
 
-    private fun displayShortToast(text:String){
-        Toast.makeText(this,text,Toast.LENGTH_SHORT).show()
+
+    private fun displayLongToast(stringResource:Int){
+        val text = getString(stringResource)
+        Toast.makeText(this,text,Toast.LENGTH_LONG).show()
     }
 
     @RequiresApi(Build.VERSION_CODES.M)

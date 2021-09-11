@@ -11,7 +11,7 @@
         android:id="@+id/tfLatitude"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Latitude">
+        android:hint="@string/latitude">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etLatitude"
@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:hint="Longitude">
+        android:hint="@string/longitude">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etLongitude"
