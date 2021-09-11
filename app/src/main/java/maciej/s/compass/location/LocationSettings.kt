@@ -1,4 +1,4 @@
-package maciej.s.compass
+package maciej.s.compass.location
 
 import android.app.Activity
 import com.google.android.gms.location.*

@@ -10,7 +10,7 @@ import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import maciej.s.compass.BuildVersionChecker
 import maciej.s.compass.CompassSensorsManager
-import maciej.s.compass.LocationSettings
+import maciej.s.compass.location.LocationSettings
 import maciej.s.compass.PermissionManager
 import maciej.s.compass.location.LocationOperation
 
