@@ -96,7 +96,6 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
         setObservers()
         arrowImage = findViewById(R.id.arrowImage)
         directionTriangleImage = findViewById(R.id.directionTriangleImage)
-        tvBearing = findViewById(R.id.tvBearing)
         tvDistance = findViewById(R.id.tvDistance)
     }
 
@@ -140,10 +139,7 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
     private fun setObservers() {
         viewModel.distanceMeters.observe(this, {
             val intMeters = it.toInt()
-            tvDistance.text = getString(R.string.meters_short,intMeters)
-        })
-        viewModel.bearing.observe(this,{
-            tvBearing.text = "$it"
+            tvDistance.text = getString(R.string.distance_from_the_destination,intMeters)
         })
         viewModel.yourDirectionBearing.observe(this,{
             directionTriangleImage.rotation = it
