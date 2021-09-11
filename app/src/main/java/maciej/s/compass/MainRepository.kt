@@ -57,7 +57,7 @@ class MainRepository {
     }
 
     fun pauseCompassSensor() {
-        compassSensorsManager!!.pauseCompassSensor()
+        compassSensorsManager?.pauseCompassSensor()
         compassSensorsManager = null
     }
 
