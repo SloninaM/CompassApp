@@ -7,7 +7,6 @@ import android.os.Binder
 import android.os.IBinder
 import android.os.Looper
 import com.google.android.gms.location.*
-import com.google.android.gms.tasks.Task
 import maciej.s.compass.location.LocationUtils.LOCATION_RECEIVE
 import maciej.s.compass.location.LocationUtils.LATITUDE
 import maciej.s.compass.location.LocationUtils.LONGITUDE

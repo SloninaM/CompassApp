@@ -5,7 +5,6 @@ import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.location.Location
-import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task

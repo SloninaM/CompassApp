@@ -25,7 +25,6 @@ import maciej.s.compass.location.LocationService
 import maciej.s.compass.location.LocationUtils
 import maciej.s.compass.location.MyLocationReceiver
 import androidx.appcompat.app.AlertDialog
-import org.w3c.dom.Text
 
 
 class MainActivity : AppCompatActivity(), MyLocationReceiver,
