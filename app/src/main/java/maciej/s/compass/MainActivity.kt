@@ -40,10 +40,10 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
 
     private lateinit var viewModel: MainViewModel
 
-    lateinit var arrowImage: ImageView
-    lateinit var directionTriangleImage: ImageView
-    lateinit var tvBearing: TextView
-    lateinit var tvDistance: TextView
+    private lateinit var arrowImage: ImageView
+    private lateinit var directionTriangleImage: ImageView
+    private lateinit var tvBearing: TextView
+    private lateinit var tvDistance: TextView
 
     @RequiresApi(Build.VERSION_CODES.M)
     private val requestPermissionLauncher =
@@ -139,7 +139,8 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
     @SuppressLint("NewApi")
     private fun setObservers() {
         viewModel.distanceMeters.observe(this, {
-            tvDistance.text = "$it m"
+            val intMeters = it.toInt()
+            tvDistance.text = getString(R.string.meters_short,intMeters)
         })
         viewModel.bearing.observe(this,{
             tvBearing.text = "$it"
