@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
                 if(shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)) {
                     createInfoDialog()
                 }else{
-                    displayShortToast(getString(R.string.allow_location_in_app_settings))
+                    displayLongToast(R.string.allow_location_in_app_settings)
                 }
             }
         }
@@ -254,6 +254,11 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
 
     private fun displayShortToast(text:String){
         Toast.makeText(this,text,Toast.LENGTH_SHORT).show()
+    }
+
+    private fun displayLongToast(stringResource:Int){
+        val text = getString(stringResource)
+        Toast.makeText(this,text,Toast.LENGTH_LONG).show()
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
