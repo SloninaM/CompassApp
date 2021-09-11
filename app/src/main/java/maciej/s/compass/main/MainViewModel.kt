@@ -38,6 +38,8 @@ class MainViewModel: ViewModel() {
 
     private val duration_per_diff = 7L
 
+    var hasSensors = true
+
 
     fun checkLocationTurnOn(activity: Activity): Task<LocationSettingsResponse> {
         return repo.locationSettingsResponseTaskForFastRequesting(activity)

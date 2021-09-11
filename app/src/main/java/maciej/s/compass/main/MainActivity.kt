@@ -12,6 +12,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -102,7 +103,9 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
 
     override fun onResume() {
         super.onResume()
-        setSensors()
+        if(viewModel.hasSensors){
+            setSensors()
+        }
     }
 
     private fun setSensors() {
@@ -112,10 +115,11 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
 
         when {
             sensorMagneticField == null -> {
-                //TODO set this info on viewModel and don't check it again, maybe hidden the image
+                setNoSensors()
                 displayLongToast(R.string.app_cant_work_correctly_no_magnetic_field_sensor)
             }
             sensorAccelerometer == null -> {
+                setNoSensors()
                 displayLongToast(R.string.app_cant_work_correctly_no_accelerometer_field_sensor)
             }
             else -> {
@@ -128,6 +132,12 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
                 })
             }
         }
+    }
+
+    private fun setNoSensors(){
+        viewModel.hasSensors = false
+        compassImage.alpha = 0.1f
+        directionTriangleImage.visibility = View.INVISIBLE
     }
 
     private fun setDirectionTrianglePosition(duration: Long) {
