@@ -38,7 +38,9 @@ class LocationOperationTest {
     @Test
     fun calculateBearing_krakowRzeszow_returnAbout90(){
 
-        val locationOperation = LocationOperation(krakowLocation,rzeszowLocation)
+        val locationOperation = LocationOperation(rzeszowLocation)
+        locationOperation.setCurrentLocation(krakowLocation)
+
 
         val bearing = locationOperation.calculateBearing()
 
@@ -48,7 +50,8 @@ class LocationOperationTest {
     @Test
     fun calculateBearing_warszawaWroclaw_returnAboutMinus115(){
 
-        val locationOperation = LocationOperation(warszawaLocation,wroclawLocation)
+        val locationOperation = LocationOperation(wroclawLocation)
+        locationOperation.setCurrentLocation(warszawaLocation)
 
         val bearing = locationOperation.calculateBearing()
 
@@ -57,7 +60,8 @@ class LocationOperationTest {
 
     @Test
     fun calculateDistance_krakowWarszawa_returnAbout252000m(){
-        val locationOperation = LocationOperation(krakowLocation,warszawaLocation)
+        val locationOperation = LocationOperation(warszawaLocation)
+        locationOperation.setCurrentLocation(krakowLocation)
         val distance = locationOperation.calculateDistance()
         val myDistance = 252_000f
 
@@ -66,7 +70,8 @@ class LocationOperationTest {
 
     @Test
     fun calculateDistance_wroclawRzeszow_returnAbout372000m(){
-        val locationOperation = LocationOperation(wroclawLocation,rzeszowLocation)
+        val locationOperation = LocationOperation(rzeszowLocation)
+        locationOperation.setCurrentLocation(wroclawLocation)
         val distance = locationOperation.calculateDistance()
         val myDistance = 372_000f
 
