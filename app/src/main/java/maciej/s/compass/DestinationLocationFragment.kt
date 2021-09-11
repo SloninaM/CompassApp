@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.textfield.TextInputEditText
-import kotlinx.android.synthetic.main.fragment_destination_location.*
 
 class DestinationLocationFragment : DialogFragment() {
 

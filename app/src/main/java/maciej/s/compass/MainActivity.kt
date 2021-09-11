@@ -12,18 +12,20 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
-import kotlinx.android.synthetic.main.activity_main.*
 import maciej.s.compass.location.LocationReceiver
 import maciej.s.compass.location.LocationService
 import maciej.s.compass.location.LocationUtils
 import maciej.s.compass.location.MyLocationReceiver
 import androidx.appcompat.app.AlertDialog
+import org.w3c.dom.Text
 
 
 class MainActivity : AppCompatActivity(), MyLocationReceiver,
@@ -39,6 +41,11 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
 
     private lateinit var viewModel: MainViewModel
 
+    lateinit var arrowImage: ImageView
+    lateinit var directionTriangleImage: ImageView
+    lateinit var tvBearing: TextView
+    lateinit var tvDistance: TextView
+
     @RequiresApi(Build.VERSION_CODES.M)
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()
@@ -53,6 +60,7 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
                 }
             }
         }
+
 
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -87,6 +95,10 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         setObservers()
+        arrowImage = findViewById(R.id.arrowImage)
+        directionTriangleImage = findViewById(R.id.directionTriangleImage)
+        tvBearing = findViewById(R.id.tvBearing)
+        tvDistance = findViewById(R.id.tvDistance)
     }
 
     override fun onResume() {
