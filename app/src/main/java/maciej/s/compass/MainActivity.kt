@@ -49,9 +49,8 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
                 if(shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)) {
                     createInfoDialog()
                 }else{
-                    displayShortToast("You need 'allow' location, it settings of your app. Now app can't work correctly")
+                    displayShortToast("You need 'allow' location, it settings of your app or reinstall app. Now app can't work correctly")
                 }
-
             }
         }
 
