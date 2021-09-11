@@ -114,10 +114,10 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
         when {
             sensorMagneticField == null -> {
                 //TODO set this info on viewModel and don't check it again, maybe hidden the image
-                displayShortToast("Compass can't work correctly.\n Your device haven't magnetic field sensor")
+                displayLongToast(R.string.app_cant_work_correctly_no_magnetic_field_sensor)
             }
             sensorAccelerometer == null -> {
-                displayShortToast("Compass can't work correctly.\n Your device haven't accelerometer sensor")
+                displayLongToast(R.string.app_cant_work_correctly_no_accelerometer_field_sensor)
             }
             else -> {
                 viewModel.setCompassSensors(sensorManager,sensorMagneticField,sensorAccelerometer) //TODO REMEBER TO null this value when onPause and this method in onResume
@@ -252,9 +252,6 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
         alertDialog.show()
     }
 
-    private fun displayShortToast(text:String){
-        Toast.makeText(this,text,Toast.LENGTH_SHORT).show()
-    }
 
     private fun displayLongToast(stringResource:Int){
         val text = getString(stringResource)

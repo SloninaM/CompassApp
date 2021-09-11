@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Compass</string>
     <string name="allow_location_in_app_settings">You need \'allow\' location in the settings of your app\n or reinstall the app.\nNow app can\'t work correctly</string>
+    <string name="app_cant_work_correctly_no_magnetic_field_sensor">Compass can\'t work correctly.\nYour device haven\'t magnetic field sensor</string>
+    <string name="app_cant_work_correctly_no_accelerometer_field_sensor">Compass can\'t work correctly.\nYour device haven\'t accelerometer sensor</string>
 </resources>
