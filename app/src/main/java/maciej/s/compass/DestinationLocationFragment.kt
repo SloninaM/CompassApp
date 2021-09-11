@@ -25,7 +25,7 @@ class DestinationLocationFragment : DialogFragment() {
             val view = inflater?.inflate(R.layout.fragment_destination_location,null)
             builder.setView(view)
             builder.setTitle(getString(R.string.enter_destination_location))
-                .setPositiveButton(getString(R.string.ok)) { sth1, sth2 ->
+                .setPositiveButton(getString(R.string.ok)) { _, _ ->
                     val latitudeEditText = view?.findViewById<TextInputEditText>(R.id.etLatitude)
                     val longitudeEditText = view?.findViewById<TextInputEditText>(R.id.etLongitude)
                     checkFields(latitudeEditText,longitudeEditText)
