@@ -21,17 +21,15 @@ class MainViewModel: ViewModel() {
     val distanceMeters: LiveData<Float>
         get() = _distanceMeters
 
-    private val _bearing = MutableLiveData<Float>(0f)
-    val bearing: LiveData<Float>
-        get() = _bearing
+    private val _shownLocationRationaleSwitcher = MutableLiveData<Boolean>()
+    val shownLocationRationaleSwitcher: LiveData<Boolean>
+            get() = _shownLocationRationaleSwitcher
 
     lateinit var imageRotation: LiveData<Float>
 
-    private val _shownLocationRationaleSwitcher = MutableLiveData<Boolean>()
-        val shownLocationRationaleSwitcher: LiveData<Boolean>
-            get() = _shownLocationRationaleSwitcher
-
     private var lastRotation = 0f
+
+    private var bearing = 0f
 
     private val duration_per_diff = 7L
 
@@ -63,7 +61,7 @@ class MainViewModel: ViewModel() {
     }
 
     fun calculateBearing() {
-        _bearing.value = repo.calculateBearing()
+        bearing = repo.calculateBearing()
     }
 
     fun setCompassSensors(
@@ -82,14 +80,8 @@ class MainViewModel: ViewModel() {
         imageRotation = repo.getCompassRotation()
     }
 
-    fun getDirectionTriangle(): Float? {
-        val bearing = bearing.value
-        return if(bearing != null){
-            bearing + imageRotation.value!!
-        }else{
-            null
-        }
-
+    fun getDirectionTriangle(): Float {
+        return bearing + imageRotation.value!!
     }
 
     fun setShownLocationRationaleSwitcher() {

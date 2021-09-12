@@ -89,9 +89,7 @@ class CompassFragment: Fragment() {
 
     private fun setDirectionTrianglePosition(duration: Long) {
         val directionTriangleRotation = viewModel.getDirectionTriangle()
-        if (directionTriangleRotation != null) {
-            directionTriangleImage.animate().rotation(directionTriangleRotation).duration = duration
-        }
+        directionTriangleImage.animate().rotation(directionTriangleRotation).duration = duration
     }
 
     override fun onPause() {
