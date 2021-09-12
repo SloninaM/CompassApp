@@ -60,11 +60,7 @@ class LocationService: Service() {
         val desc = resources.getString(R.string.notification_location_desc)
         val notificationBuilder = MyNotificationManager.getLocationNotification(notificationManager,channelId,desc,applicationContext)
 
-        val locationRequest = LocationRequest.create().apply {
-            interval = 10000
-            fastestInterval = 5000
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        }
+        val locationRequest = MyLocationRequest.getFastLocationRequest()
 
         locationServices = LocationServices.getFusedLocationProviderClient(this)
         locationServices.requestLocationUpdates(locationRequest,callback, Looper.getMainLooper())

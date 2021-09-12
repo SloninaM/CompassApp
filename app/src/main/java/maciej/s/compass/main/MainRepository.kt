@@ -13,6 +13,7 @@ import maciej.s.compass.sensors.CompassSensorsManager
 import maciej.s.compass.location.LocationSettings
 import maciej.s.compass.helper.PermissionManager
 import maciej.s.compass.location.LocationOperation
+import maciej.s.compass.location.MyLocationRequest
 
 class MainRepository {
 
@@ -24,7 +25,7 @@ class MainRepository {
 
 
     fun locationSettingsResponseTaskForFastRequesting(activity: Activity): Task<LocationSettingsResponse> {
-        return locationSettings.locationFastRequestBuilder(activity)
+        return locationSettings.locationFastRequestBuilder(activity,MyLocationRequest.getFastLocationRequest())
     }
 
     fun isPermissionGranted(context: Context, permission: String): Boolean {
