@@ -71,7 +71,7 @@ class CompassFragment: Fragment() {
                     sensorManager,
                     sensorMagneticField,
                     sensorAccelerometer
-                ) //TODO REMEBER TO null this value when onPause and this method in onResume
+                )
                 viewModel.setImageRotation()
                 viewModel.imageRotation.observe(this, {
                     val duration = viewModel.getDuration(it)
