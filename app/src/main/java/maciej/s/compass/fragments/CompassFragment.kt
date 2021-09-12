@@ -45,6 +45,11 @@ class CompassFragment: Fragment() {
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         viewModel =  ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+        viewModel.locationUpdateStartedSwitcher.observe(viewLifecycleOwner,{
+            if(viewModel.hasSensors){
+                directionTriangleImage.visibility = View.VISIBLE
+            }
+        })
     }
 
     private fun setSensors() {
@@ -63,8 +68,6 @@ class CompassFragment: Fragment() {
                 displayLongToast(R.string.app_cant_work_correctly_no_accelerometer_field_sensor)
             }
             else -> {
-                directionTriangleImage.visibility = View.VISIBLE
-
                 viewModel.setCompassSensors(
                     sensorManager,
                     sensorMagneticField,
@@ -84,7 +87,6 @@ class CompassFragment: Fragment() {
     private fun setNoSensors(){
         viewModel.hasSensors = false
         compassImage.alpha = 0.1f
-        directionTriangleImage.visibility = View.INVISIBLE
     }
 
     private fun setDirectionTrianglePosition(duration: Long) {

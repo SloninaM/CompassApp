@@ -25,6 +25,10 @@ class MainViewModel: ViewModel() {
     val shownLocationRationaleSwitcher: LiveData<Boolean>
             get() = _shownLocationRationaleSwitcher
 
+    private val _locationUpdateStartedSwitcher = MutableLiveData<Boolean>()
+    val locationUpdateStartedSwitcher: LiveData<Boolean>
+        get() = _locationUpdateStartedSwitcher
+
     lateinit var imageRotation: LiveData<Float>
 
     private var lastRotation = 0f
@@ -92,5 +96,10 @@ class MainViewModel: ViewModel() {
         val duration = (lastRotation - currentRotation).absoluteValue * duration_per_diff
         lastRotation = currentRotation
         return duration.toLong()
+    }
+
+    fun setLocationUpdateStartedTrue() {
+        isLocationUpdateStarted = true
+        _locationUpdateStartedSwitcher.value = _locationUpdateStartedSwitcher.value != true
     }
 }

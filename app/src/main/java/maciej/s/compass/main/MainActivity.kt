@@ -123,7 +123,7 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
     }
 
     private fun startCompass(){
-        viewModel.isLocationUpdateStarted = true
+        viewModel.setLocationUpdateStartedTrue()
         if(viewModel.isLocationUpdateStarted){
             val intent = Intent(this,LocationService::class.java)
             intent.action = LocationService.START
