@@ -129,7 +129,6 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
             intent.action = LocationService.START
             startService(intent)
         }
-        //mService.startLocationUpdates()
     }
 
     override fun onLocationReceive(latitude:Double,longitude:Double) {
