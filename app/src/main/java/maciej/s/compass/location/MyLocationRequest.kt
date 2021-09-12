@@ -6,8 +6,8 @@ object MyLocationRequest {
 
     fun getFastLocationRequest(): LocationRequest {
         val locationRequest = LocationRequest.create().apply {
-            interval = 10000
-            fastestInterval = 5000
+            interval = 6000
+            fastestInterval = 3000
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
         return locationRequest
