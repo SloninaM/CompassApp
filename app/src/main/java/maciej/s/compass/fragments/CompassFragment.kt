@@ -38,7 +38,9 @@ class CompassFragment: Fragment() {
     override fun onResume() {
         super.onResume()
         if(viewModel.hasSensors){
-            setSensors()
+        setSensors()
+        }else{
+            setNoSensors()
         }
     }
 
@@ -63,7 +65,8 @@ class CompassFragment: Fragment() {
                 displayLongToast(R.string.app_cant_work_correctly_no_accelerometer_field_sensor)
             }
             else -> {
-                //viewModel.setCompassReadySwitcher()
+                directionTriangleImage.visibility = View.VISIBLE
+
                 viewModel.setCompassSensors(
                     sensorManager,
                     sensorMagneticField,
