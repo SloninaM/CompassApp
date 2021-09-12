@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import androidx.appcompat.app.AlertDialog
+import androidx.cardview.widget.CardView
 import maciej.s.compass.fragments.DestinationLocationFragment
 import maciej.s.compass.R
 import maciej.s.compass.location.*
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
     private var mBound: Boolean = false
 
     private lateinit var tvDistance: TextView
+    private lateinit var cvDistance: CardView
 
     private lateinit var viewModel: MainViewModel
 
@@ -76,6 +79,7 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
         setContentView(R.layout.activity_main)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         tvDistance = findViewById(R.id.tvDistance)
+        cvDistance = findViewById(R.id.cvDistance)
         setObservers()
     }
 
@@ -99,6 +103,7 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
             bindService(intent,serviceConnection(), Context.BIND_AUTO_CREATE)
         }
         if(viewModel.isLocationUpdateStarted){
+            setLocationInfoVisibility()
             val intent = Intent(this,LocationService::class.java)
             intent.action = LocationService.START
             startService(intent)
@@ -214,7 +219,12 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
         location.latitude = latitude
         location.longitude = longitude
         viewModel.setDestination(location)
-
         checkLocationTurnOn()
+        setLocationInfoVisibility()
+    }
+
+    private fun setLocationInfoVisibility() {
+        cvDistance.visibility = View.VISIBLE
+        tvDistance.visibility = View.VISIBLE
     }
 }
