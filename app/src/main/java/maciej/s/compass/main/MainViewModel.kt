@@ -14,6 +14,7 @@ import kotlin.math.absoluteValue
 
 class MainViewModel: ViewModel() {
 
+    var isLocationUpdateStarted = false
     private val repo = MainRepository()
 
     private val _distanceMeters = MutableLiveData<Float>()

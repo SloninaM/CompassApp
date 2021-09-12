@@ -10,6 +10,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
+import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,13 +18,10 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
-import maciej.s.compass.location.LocationReceiver
-import maciej.s.compass.location.LocationService
-import maciej.s.compass.location.LocationUtils
-import maciej.s.compass.location.MyLocationReceiver
 import androidx.appcompat.app.AlertDialog
 import maciej.s.compass.fragments.DestinationLocationFragment
 import maciej.s.compass.R
+import maciej.s.compass.location.*
 
 
 class MainActivity : AppCompatActivity(), MyLocationReceiver,
@@ -33,9 +31,9 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
         private const val REQUEST_CHECK_SETTINGS = 35
     }
 
-    private lateinit var mService: LocationService
+    private lateinit var locationReceiver:BroadcastReceiver
+
     private var mBound: Boolean = false
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private lateinit var tvDistance: TextView
 
@@ -57,6 +55,7 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
         }
 
 
+    private fun serviceConnection() = LocationServiceConnection.connection
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -70,25 +69,12 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
         }
     }
 
-    private val connection = object: ServiceConnection {
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            val binder = service as LocationService.LocalBinder
-            mService = binder.getService()
-            mBound = true
-        }
-
-        override fun onServiceDisconnected(name: ComponentName?) {
-            mBound = false
-        }
-
-    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         tvDistance = findViewById(R.id.tvDistance)
         setObservers()
     }
@@ -107,28 +93,45 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
 
     override fun onStart() {
         super.onStart()
-        val locationReceiver = LocationReceiver(this)
+        locationReceiver = LocationReceiver(this)
         registerReceiver(locationReceiver, IntentFilter(LocationUtils.LOCATION_RECEIVE))
-        Intent(this, LocationService::class.java).also{ intent->
-            bindService(intent,connection, Context.BIND_AUTO_CREATE)
+        Intent(applicationContext, LocationService::class.java).also{ intent->
+            bindService(intent,serviceConnection(), Context.BIND_AUTO_CREATE)
+        }
+        if(viewModel.isLocationUpdateStarted){
+            val intent = Intent(this,LocationService::class.java)
+            intent.action = LocationService.START
+            startService(intent)
         }
     }
 
     override fun onStop() {
         super.onStop()
-        mService.stop()
-        unbindService(connection)
+        if(viewModel.isLocationUpdateStarted){
+            val intent = Intent(this,LocationService::class.java)
+            intent.action = LocationService.STOP
+            startService(intent)
+        }
+        unbindService(serviceConnection())
+        unregisterReceiver(locationReceiver)
         mBound = false
     }
 
     private fun startCompass(){
-        mService.startLocationUpdates()
+        viewModel.isLocationUpdateStarted = true
+        if(viewModel.isLocationUpdateStarted){
+            val intent = Intent(this,LocationService::class.java)
+            intent.action = LocationService.START
+            startService(intent)
+        }
+        //mService.startLocationUpdates()
     }
 
     override fun onLocationReceive(latitude:Double,longitude:Double) {
         val location = Location(LocationManager.GPS_PROVIDER)
         location.latitude = latitude
         location.longitude = longitude
+        Log.i("latitude","$latitude")
         viewModel.setCurrentPosition(location)
         viewModel.calculateDistance()
         viewModel.calculateBearing()
