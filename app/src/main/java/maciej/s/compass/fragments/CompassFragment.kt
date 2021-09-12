@@ -17,8 +17,6 @@ import maciej.s.compass.main.MainViewModel
 
 class CompassFragment: Fragment() {
 
-
-
     private lateinit var viewModel: MainViewModel
     private lateinit var compassImage: ImageView
     private lateinit var directionTriangleImage: ImageView
