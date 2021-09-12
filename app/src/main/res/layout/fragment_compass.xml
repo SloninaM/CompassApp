@@ -13,7 +13,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@mipmap/compass_blue"
-        android:contentDescription="compass" />
+        android:contentDescription="@string/compass" />
 
     <ImageView
         android:id="@+id/directionTriangleImage"
@@ -25,7 +25,7 @@
         app:layout_constraintStart_toStartOf="@id/compassImage"
         app:layout_constraintTop_toTopOf="@id/compassImage"
         app:srcCompat="@mipmap/green_triangle"
-        android:contentDescription="directionTriangle" />
+        android:contentDescription="@string/directionTriangle" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
