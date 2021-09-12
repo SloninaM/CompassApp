@@ -1,19 +1,15 @@
 package maciej.s.compass.location
 
 import android.annotation.SuppressLint
-import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.Binder
-import android.os.Build
 import android.os.IBinder
 import android.os.Looper
-import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.*
-import maciej.s.compass.MyNotificationManager
+import maciej.s.compass.notification.MyNotificationManager
 import maciej.s.compass.R
 import maciej.s.compass.location.LocationUtils.LOCATION_RECEIVE
 import maciej.s.compass.location.LocationUtils.LATITUDE

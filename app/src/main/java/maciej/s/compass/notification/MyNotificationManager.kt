@@ -1,4 +1,4 @@
-package maciej.s.compass
+package maciej.s.compass.notification
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import maciej.s.compass.R
 
 object MyNotificationManager {
 
