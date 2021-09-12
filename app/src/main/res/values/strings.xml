@@ -13,4 +13,7 @@
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
     <string name="distance_from_the_destination">Distance from the destination: %1$d m</string>
+    <string name="notification_location_desc">App get your location set distance to destination ;)</string>
+    <string name="compass">compass</string>
+    <string name="directionTriangle">directionTriangle</string>
 </resources>

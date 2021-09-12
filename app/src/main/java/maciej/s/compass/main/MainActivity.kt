@@ -1,18 +1,17 @@
-package maciej.s.compass
+package maciej.s.compass.main
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.*
-import android.hardware.Sensor
-import android.hardware.SensorManager
 import android.location.Location
 import android.location.LocationManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
-import android.widget.ImageView
+import android.util.Log
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -20,11 +19,11 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
-import maciej.s.compass.location.LocationReceiver
-import maciej.s.compass.location.LocationService
-import maciej.s.compass.location.LocationUtils
-import maciej.s.compass.location.MyLocationReceiver
 import androidx.appcompat.app.AlertDialog
+import androidx.cardview.widget.CardView
+import maciej.s.compass.fragments.DestinationLocationFragment
+import maciej.s.compass.R
+import maciej.s.compass.location.*
 
 
 class MainActivity : AppCompatActivity(), MyLocationReceiver,
@@ -34,15 +33,14 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
         private const val REQUEST_CHECK_SETTINGS = 35
     }
 
-    private lateinit var mService: LocationService
+    private lateinit var locationReceiver:BroadcastReceiver
+
     private var mBound: Boolean = false
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    private lateinit var tvDistance: TextView
+    private lateinit var cvDistance: CardView
 
     private lateinit var viewModel: MainViewModel
-
-    private lateinit var compassImage: ImageView
-    private lateinit var directionTriangleImage: ImageView
-    private lateinit var tvDistance: TextView
 
     @RequiresApi(Build.VERSION_CODES.M)
     private val requestPermissionLauncher =
@@ -60,6 +58,7 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
         }
 
 
+    private fun serviceConnection() = LocationServiceConnection.connection
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -73,75 +72,23 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
         }
     }
 
-    private val connection = object: ServiceConnection {
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            val binder = service as LocationService.LocalBinder
-            mService = binder.getService()
-            mBound = true
-        }
-
-        override fun onServiceDisconnected(name: ComponentName?) {
-            mBound = false
-        }
-
-    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        setObservers()
-        compassImage = findViewById(R.id.compassImage)
-        directionTriangleImage = findViewById(R.id.directionTriangleImage)
         tvDistance = findViewById(R.id.tvDistance)
+        cvDistance = findViewById(R.id.cvDistance)
+        setObservers()
     }
 
-    override fun onResume() {
-        super.onResume()
-        setSensors()
-    }
-
-    private fun setSensors() {
-        val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-        val sensorAccelerometer: Sensor? = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-        val sensorMagneticField: Sensor? = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
-
-        when {
-            sensorMagneticField == null -> {
-                //TODO set this info on viewModel and don't check it again, maybe hidden the image
-                displayLongToast(R.string.app_cant_work_correctly_no_magnetic_field_sensor)
-            }
-            sensorAccelerometer == null -> {
-                displayLongToast(R.string.app_cant_work_correctly_no_accelerometer_field_sensor)
-            }
-            else -> {
-                viewModel.setCompassSensors(sensorManager,sensorMagneticField,sensorAccelerometer) //TODO REMEBER TO null this value when onPause and this method in onResume
-                viewModel.setImageRotation()
-                viewModel.imageRotation.observe(this,{
-                    compassImage.rotation = it
-                    setDirectionTrianglePosition()
-                })
-            }
-        }
-    }
-
-    private fun setDirectionTrianglePosition() {
-        val directionTriangleRotation = viewModel.getDirectionTriangle()
-        if (directionTriangleRotation != null) {
-            directionTriangleImage.rotation = directionTriangleRotation
-        }
-    }
 
     @SuppressLint("NewApi")
     private fun setObservers() {
         viewModel.distanceMeters.observe(this, {
             val intMeters = it.toInt()
             tvDistance.text = getString(R.string.distance_from_the_destination,intMeters)
-        })
-        viewModel.yourDirectionBearing.observe(this,{
-            directionTriangleImage.rotation = it
         })
         viewModel.shownLocationRationaleSwitcher.observe(this,{
             launchRequestPermission(ACCESS_FINE_LOCATION)
@@ -150,33 +97,46 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
 
     override fun onStart() {
         super.onStart()
-        val locationReceiver = LocationReceiver(this)
+        locationReceiver = LocationReceiver(this)
         registerReceiver(locationReceiver, IntentFilter(LocationUtils.LOCATION_RECEIVE))
-        Intent(this, LocationService::class.java).also{ intent->
-            bindService(intent,connection, Context.BIND_AUTO_CREATE)
+        Intent(applicationContext, LocationService::class.java).also{ intent->
+            bindService(intent,serviceConnection(), Context.BIND_AUTO_CREATE)
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        viewModel.pauseCompassSensor()
+        if(viewModel.isLocationUpdateStarted){
+            setLocationInfoVisibility()
+            val intent = Intent(this,LocationService::class.java)
+            intent.action = LocationService.START
+            startService(intent)
+        }
     }
 
     override fun onStop() {
         super.onStop()
-        mService.stop()
-        unbindService(connection)
+        if(viewModel.isLocationUpdateStarted){
+            val intent = Intent(this,LocationService::class.java)
+            intent.action = LocationService.STOP
+            startService(intent)
+        }
+        unbindService(serviceConnection())
+        unregisterReceiver(locationReceiver)
         mBound = false
     }
 
     private fun startCompass(){
-        mService.startLocationUpdates()
+        viewModel.isLocationUpdateStarted = true
+        if(viewModel.isLocationUpdateStarted){
+            val intent = Intent(this,LocationService::class.java)
+            intent.action = LocationService.START
+            startService(intent)
+        }
+        //mService.startLocationUpdates()
     }
 
     override fun onLocationReceive(latitude:Double,longitude:Double) {
         val location = Location(LocationManager.GPS_PROVIDER)
         location.latitude = latitude
         location.longitude = longitude
+        Log.i("latitude","$latitude")
         viewModel.setCurrentPosition(location)
         viewModel.calculateDistance()
         viewModel.calculateBearing()
@@ -259,7 +219,12 @@ class MainActivity : AppCompatActivity(), MyLocationReceiver,
         location.latitude = latitude
         location.longitude = longitude
         viewModel.setDestination(location)
-
         checkLocationTurnOn()
+        setLocationInfoVisibility()
+    }
+
+    private fun setLocationInfoVisibility() {
+        cvDistance.visibility = View.VISIBLE
+        tvDistance.visibility = View.VISIBLE
     }
 }

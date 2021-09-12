@@ -1,4 +1,4 @@
-package maciej.s.compass
+package maciej.s.compass.main
 
 import android.app.Activity
 import android.content.Context
@@ -10,9 +10,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.location.LocationSettingsResponse
 import com.google.android.gms.tasks.Task
+import kotlin.math.absoluteValue
 
 class MainViewModel: ViewModel() {
 
+    var isLocationUpdateStarted = false
     private val repo = MainRepository()
 
     private val _distanceMeters = MutableLiveData<Float>()
@@ -32,6 +34,12 @@ class MainViewModel: ViewModel() {
     private val _shownLocationRationaleSwitcher = MutableLiveData<Boolean>()
         val shownLocationRationaleSwitcher: LiveData<Boolean>
             get() = _shownLocationRationaleSwitcher
+
+    private var lastRotation = 0f
+
+    private val duration_per_diff = 7L
+
+    var hasSensors = true
 
 
     fun checkLocationTurnOn(activity: Activity): Task<LocationSettingsResponse> {
@@ -90,5 +98,11 @@ class MainViewModel: ViewModel() {
 
     fun setShownLocationRationaleSwitcher() {
         _shownLocationRationaleSwitcher.value = _shownLocationRationaleSwitcher.value != true
+    }
+
+    fun getDuration(currentRotation: Float): Long {
+        val duration = (lastRotation - currentRotation).absoluteValue * duration_per_diff
+        lastRotation = currentRotation
+        return duration.toLong()
     }
 }

@@ -1,4 +1,4 @@
-package maciej.s.compass
+package maciej.s.compass.fragments
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.textfield.TextInputEditText
+import maciej.s.compass.R
 
 class DestinationLocationFragment : DialogFragment() {
 
