@@ -25,10 +25,6 @@ class MainViewModel: ViewModel() {
     val bearing: LiveData<Float>
         get() = _bearing
 
-    private val _yourDirectionBearing = MutableLiveData<Float>()
-    val yourDirectionBearing: LiveData<Float>
-        get() = _yourDirectionBearing
-
     lateinit var imageRotation: LiveData<Float>
 
     private val _shownLocationRationaleSwitcher = MutableLiveData<Boolean>()
